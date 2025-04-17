@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cold Call Demo</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        text-align: center;
+        padding: 3rem;
+        background-color: #f9f9f9;
+      }
+      input,
+      button {
+        font-size: 1rem;
+        padding: 0.6rem 1rem;
+        margin-top: 1rem;
+      }
+      #status {
+        margin-top: 1rem;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Cold Call Demo</h1>
+    <p>Introduce un número de teléfono para llamar:</p>
+    <input type="tel" id="phone" placeholder="+34123456789" />
+    <br />
+    <button onclick="makeCall()">Llamar</button>
+
+    <div id="status"></div>
+
+    <script>
+      async function makeCall() {
+        const phone = document.getElementById('phone').value.trim()
+        const statusEl = document.getElementById('status')
+        statusEl.textContent = ''
+
+        if (!phone) {
+          statusEl.textContent = '❌ Ingresa un número válido.'
+          return
+        }
+
+        statusEl.textContent = '📞 Llamando...'
+
+        try {
+          const res = await fetch(
+            'https://cold-calls-backend.onrender.com/call',
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ phone })
+            }
+          )
+
+          const data = await res.json()
+
+          if (data.success) {
+            statusEl.textContent = '✅ Llamada iniciada correctamente.'
+          } else {
+            statusEl.textContent = '❌ Error al iniciar la llamada.'
+          }
+        } catch (err) {
+          console.error(err)
+          statusEl.textContent = '❌ Error de conexión con el servidor.'
+        }
+      }
+    </script>
+  </body>
+</html>
