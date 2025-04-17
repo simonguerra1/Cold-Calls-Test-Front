@@ -46,11 +46,14 @@
         statusEl.textContent = '📞 Llamando...'
 
         try {
-          const res = await fetch('/call', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone })
-          })
+          const res = await fetch(
+            'https://cold-calls-backend.onrender.com/call',
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ phone })
+            }
+          )
 
           const data = await res.json()
 
